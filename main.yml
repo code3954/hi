@@ -39,9 +39,10 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         script: |           
           PIDS=$(pgrep -f "java -jar -Dspring.profiles.active=prod app.jar")
-          if [ $(echo "$PIDS" | wc -l) -gt 1 ]; then
-              sudo kill $(echo "$PIDS" | head -n 1) || true
-          fi
-          sudo nohup java -jar -Dspring.profiles.active=prod app.jar > app.log 2>&1 &
+        if [ -n "$PIDS" ]; then
+            sudo kill -9 $PIDS || true
+        fi
+        sudo nohup java -jar -Dspring.profiles.active=prod app.jar > app.log 2>&1 &
+
      
           

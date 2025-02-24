@@ -27,7 +27,7 @@ jobs:
         PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
         HOST: ${{ secrets.EC2_HOST }}
         USER: ${{ secrets.EC2_USERNAME }}
-      run: |
+      run: 
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key 
         scp -o StrictHostKeyChecking=no -i private_key target/*.jar ${USER}@${HOST}:~/app.jar
     
@@ -37,7 +37,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
-        script: |           
+        script:            
           PIDS=$(pgrep -f "java -jar -Dspring.profiles.active=prod app.jar")
           if [ $(echo "$PIDS" | wc -l) -gt 1 ]; then
               sudo kill $(echo "$PIDS" | head -n 1) || true
